@@ -1,0 +1,31 @@
+Compte rendu base de données TP1
+
+1/ CREATE DATABASE nombase;
+
+2/ CREATE SCHEMA u_20175418;
+   CREATE SCHEMA jeu;
+
+3/ SET search_path TO "jeu", "$u20175418", public;
+
+4/ DROP SCHEMA public;
+
+10/ ALTER TABLE visiteur ADD COLUMN id_loc bigint;
+	UPDATE visiteur SET id_loc=localisation.id_loc from localisation WHERE ville=nom_loc;
+	ALTER TABLE visiteur DROP COLUMN ville;
+
+11/ UPDATE visiteur SET id_loc=1 WHERE login='Ian';
+	UPDATE visiteur SET id_loc=2 WHERE login='Sean';
+
+12/ ALTER TABLE jeu RENAME COLUMN nb_joueur TO nb_joueur_max;
+
+13/ SELECT nom_avatar,nom_race FROM avatar RIGHT JOIN race ON avatar.id_race=race.id_race;
+
+14/ SELECT id_avatar FROM avatar NATURAL JOIN save NATURAL JOIN jeu WHERE nom_jeu='League of Angels';
+
+15/ SELECT id_visiteur, COUNT(id_avatar) as nb_avatar FROM visiteur NATURAL JOIN avatar GROUP BY id_visiteur;
+
+16/ SELECT nom_objet FROM objet NATURAL JOIN visiteur NATURAL JOIN stock WHERE login='Elijah' AND nb_dispo>0;
+
+17/ SELECT nom_avatar,highscore FROM avatar NATURAL JOIN partie NATURAL JOIN jeu WHERE nom_jeu='Solitaire' ORDER BY highscore DESC LIMIT 5;
+
+18/ SELECT nom_avatar, SUM(nb_dispo) FROM avatar NATURAL JOIN stock NATURAL JOIN race WHERE nom_race='Elfe' GROUP BY nom_avatar;

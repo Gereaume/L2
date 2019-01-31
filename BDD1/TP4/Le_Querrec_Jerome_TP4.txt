@@ -1,0 +1,210 @@
+CREATE TABLE pers(
+	id_pers	integer	NOT NULL	PRIMARY KEY,
+	nom_pers	varchar(50),
+	prenom_pers	varchar(50),
+	date_nais	date,
+	date_deces	date,
+	nationalite	varchar(50)
+);
+
+CREATE TABLE edit(
+	id_edit	integer	NOT NULL	PRIMARY KEY,
+	nom_edit	varchar(20),
+	pays	varchar(20)
+);
+
+CREATE TABLE cd(
+	id_cd	integer	NOT NULL	PRIMARY KEY,
+       	titre_cd	varchar(75),
+       	id_edit	integer,
+       	note_art	integer,
+       	note_tech	integer,
+	nom_distrib	varchar(50),
+	
+	FOREIGN KEY(id_edit) REFERENCES edit(id_edit)
+);
+
+CREATE TABLE enr(
+	id_cd	integer	NOT NULL,
+	id_enr	integer	NOT NULL,
+	tire_enr	varchar(50),
+	duree_enr	varchar(50),
+	annee_enr	integer	CHECK (annee_enr BETWEEN 1900 AND 2150),
+	lieu_enr	varchar(50),
+	cond_enr	varchar(50)	CHECK(cond_enr IN('studio','live','acoustic','public')),
+	
+	
+	PRIMARY KEY(id_cd,id_
+
+---- INSERTIONS
+
+--GYMNASE (id_gym, nom_gym, adr_gym, nom_gardien)
+INSERT INTO GYMNASE VALUES (DEFAULT,'Pierre de Coubertin',NULL,'G_Jacquard');
+INSERT INTO GYMNASE VALUES (DEFAULT,'Pierre Brossolette',NULL,'G_Terpin');
+INSERT INTO GYMNASE VALUES(DEFAULT,'Leo Lagrange',NULL,'G_Terpin');
+
+--SALLE (id_salle, nom_salle, #id_gym)
+INSERT INTO SALLE VALUES (12,'Dojo',(select id_gym from gymnase where nom_gym='Pierre de Coubertin'));
+INSERT INTO SALLE VALUES (15,'Marumba',(select id_gym from gymnase where nom_gym='Pierre de Coubertin'));
+INSERT INTO SALLE VALUES (14,'Tatami',(select id_gym from gymnase where nom_gym='Pierre Brossolette'));
+INSERT INTO SALLE VALUES (17,'Bingo',(select id_gym from gymnase where nom_gym='Leo Lagrange'));
+INSERT INTO SALLE VALUES (23,'SALLE 1',(select id_gym from gymnase where nom_gym='Leo Lagrange'));
+INSERT INTO SALLE VALUES (24,'SALLE 2',(select id_gym from gymnase where nom_gym='Leo Lagrange'));
+
+
+--CLUB (id_club, nom_club, adr_club)
+INSERT INTO CLUB VALUES (DEFAULT,'SPORTIF LAVALLOIS',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'ACB',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'TVC',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'PETITS LOUPS',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'MAMIE SPORTIVE',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'SMA',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'FIC',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'MVC',NULL);
+
+--SPORT (id_sport, nom_sport)
+INSERT INTO SPORT VALUES (DEFAULT,'Judo');
+INSERT INTO SPORT VALUES (DEFAULT,'Tennis');
+INSERT INTO SPORT VALUES (DEFAULT,'Football');
+INSERT INTO SPORT VALUES (DEFAULT,'BasketBall');
+INSERT INTO SPORT VALUES (DEFAULT,'Gymnastique');
+INSERT INTO SPORT VALUES (DEFAULT,'Handball');
+INSERT INTO SPORT VALUES (DEFAULT,'Preparation Physique');
+INSERT INTO SPORT VALUES (DEFAULT,'Table Tennis');
+INSERT INTO SPORT VALUES (DEFAULT,'VolleyBall');
+INSERT INTO SPORT VALUES (DEFAULT,'Badminton');
+
+--CATEGORIE (id_cat, nom_cat, #id_sport)
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior',(select id_sport from sport where nom_sport='BasketBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='BasketBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Veteran',(select id_sport from sport where nom_sport='BasketBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior',(select id_sport from sport where nom_sport='Tennis'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='Tennis'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Veteran',(select id_sport from sport where nom_sport='Tennis'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Minor I',(select id_sport from sport where nom_sport='Judo'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Minor II',(select id_sport from sport where nom_sport='Judo'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior',(select id_sport from sport where nom_sport='FootBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='FootBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Veteran',(select id_sport from sport where nom_sport='FootBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior I',(select id_sport from sport where nom_sport='Gymnastique'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior II',(select id_sport from sport where nom_sport='Gymnastique'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='Gymnastique'));
+
+--EQUIPE (id_equipe, nom_equipe, #id_cat, #id_club)
+INSERT INTO EQUIPE VALUES (DEFAULT,'SC Minor I',7,1);
+INSERT INTO EQUIPE VALUES (DEFAULT,'SC Minor II',8,1);
+INSERT INTO EQUIPE VALUES (DEFAULT,'ACB Junior',4,2);
+INSERT INTO EQUIPE VALUES (DEFAULT,'ACB Senior',5,2);
+INSERT INTO EQUIPE VALUES (DEFAULT,'ACB Veteran',6,2);
+INSERT INTO EQUIPE VALUES (DEFAULT,'TVC Minor II',2,4);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Les petits rouleurs',12,5);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Les petits poussins',7,1);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Jumping Senior',2,4);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Volontary women',14,5);
+INSERT INTO EQUIPE VALUES (DEFAULT,'SMA Senior II',2,6);
+
+--TRANCHE_HORAIRE(id_th, semaine_th, jour_th, heure_deb_th)
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Lundi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Lundi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Lundi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mardi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mardi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Mardi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mercredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mercredi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Mercredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Jeudi' ,'15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Jeudi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Jeudi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Vendredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Vendredi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Vendredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Samedi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Samedi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Samedi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Dimanche','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Dimanche','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Dimanche','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Dimanche','19:00');
+
+
+--ENTRAINEMENT(id_ent, nb_joueur, nom_entraineur, #id_equipe, #id_th, #id_salle, #id_gym)
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,5,'Loic Dupont',1,1,12,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,12,'Sophie Banot',2,2,12,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,24,'Luc Marni',1,5,15,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,16,'Clementine Pierrot',4,4,15,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,12,'Jacques Santini',5,8,23,3);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,NULL,'Luc Marni',3,5,15,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,NULL,'Jiji Loroso',7,3,14,2);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,NULL,'Manu Katche',9,22,15,1);
+enr),
+	FOREIGN KEY(id_cd)	REFERENCES cd(id_cd)
+);
+
+CREATE TABLE interp(
+	id_cd	integer NOT NULL,
+	id_enr	integer	NOT NULL,
+	id_interp	integer	NOT NULL,
+	instrument	varchar(20)	NOT NULL,
+
+	PRIMARY KEY(id_cd,id_enr,id_interp,instrument),
+	FOREIGN KEY(id_cd,id_enr)	REFERENCES enr,
+	--FOREIGN KEY(id_enr)	REFERENCES enr(id_enr),
+	FOREIGN KEY(id_interp)	REFERENCES pers(id_pers)
+);
+
+CREATE TABLE leader(
+	id_cd	integer	NOT NULL,
+	id_lead	integer	NOT NULL,
+	
+	PRIMARY KEY(id_cd,id_lead),
+	FOREIGN KEY(id_cd)	REFERENCES cd(id_cd),
+	FOREIGN KEY(id_lead)	REFERENCES pers(id_pers)
+);
+
+CREATE TABLE compo(
+	id_cd	integer	NOT NULL,
+	id_enr	integer NOT NULL,
+	id_compo	integer NOT NULL,
+
+	PRIMARY KEY(id_cd,id_enr,id_compo),
+	--FOREIGN KEY(id_cd)	REFERENCES cd(id_cd),
+	FOREIGN KEY(id_enr,id_cd)	REFERENCES enr,
+	FOREIGN KEY(id_compo)	REFERENCES pers(id_pers)
+);
+
+2.)
+	\i '/info/etu/l2info/s161440/BDD1/TP4/script.txt' 
+3.)
+	SELECT * FROM enr;
+	
+4.)
+	SELECT * FROM pers WHERE current_date -date_deces > 3650;
+
+5.)	SELECT * FROM enr WHERE lieu_enr IN('chicago','saint-louis') AND annee_enr>1980 AND cond_enr LIKE 'public';
+
+6.)	SELECT id_cd FROM enr WHERE cond_enr IN('public','acoustic') AND duree_enr = (SELECT MAX(duree_enr) FROM enr WHERE cond_enr IN('public','acoustic'))
+
+7.)
+	CREATE TABLE musique(
+		id_musique serial NOT NULL,
+		titre varchar(50),
+		
+		PRIMARY KEY(id_musique),
+		FOREIGN KEY(titre) REFERENCES enr(titre_enr)
+
+	);
+	
+	CREATE TABLE compo2(
+		id_compo	integer	NOT NULL,
+		id_enr	integer NOT NULL,
+		id_compo	integer NOT NULL,
+
+		PRIMARY KEY(id_musique,id_enr,id_compo),
+		FOREIGN KEY(id_compo)	REFERENCES compo2(id_compo),
+		FOREIGN KEY(id_enr)	REFERENCES enr(id_enr),
+		FOREIGN KEY(id_compo)	REFERENCES pers(id_pers)
+	);
+	
+
+

@@ -1,0 +1,16 @@
+body {
+	text-align: center;
+}
+
+nav, img, form {
+	display: none;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+.bloc {
+	border: solid 1px;
+}

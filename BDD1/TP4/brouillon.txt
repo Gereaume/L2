@@ -1,0 +1,74 @@
+CREATE TABLE pers(
+	id_pers	integer	NOT NULL	PRIMARY KEY,
+	nom_pers	varchar(50),
+	prenom_pers	varchar(50),
+	date_nais	date,
+	date_deces	date,
+	nationalite	varchar(50)
+);
+
+CREATE TABLE edit(
+	id_edit	integer	NOT NULL	PRIMARY KEY,
+	nom_edit	varchar(20),
+	pays	varchar(20)
+);
+
+CREATE TABLE cd(
+	id_cd	integer	NOT NULL	PRIMARY KEY,
+       	titre_cd	varchar(75),
+       	id_edit	integer,
+       	note_art	integer,
+       	note_tech	integer,
+	nom_distrib	varchar(50),
+	
+	FOREIGN KEY(id_edit) REFERENCES edit(id_edit)
+);
+
+CREATE TABLE enr(
+	id_cd	integer	NOT NULL,
+	id_enr	integer	NOT NULL,
+	tire_enr	varchar(50),
+	duree_enr	varchar(50),
+	annee_enr	integer	CHECK (annee_enr BETWEEN 1900 AND 2150),
+	lieu_enr	varchar(50),
+	cond_enr	varchar(50)	CHECK(cond_enr IN('studio','live','acoustic','public')),
+	
+	
+	PRIMARY KEY(id_cd,id_enr),
+	FOREIGN KEY(id_cd)	REFERENCES cd(id_cd)
+);
+
+CREATE TABLE interp(
+	id_cd	integer NOT NULL,
+	id_enr	integer	NOT NULL,
+	id_interp	integer	NOT NULL,
+	instrument	varchar(20)	NOT NULL,
+
+	PRIMARY KEY(id_cd,id_enr,id_interp,instrument),
+	FOREIGN KEY(id_cd,id_enr)	REFERENCES enr,
+	--FOREIGN KEY(id_enr)	REFERENCES enr(id_enr),
+	FOREIGN KEY(id_interp)	REFERENCES pers(id_pers)
+);
+
+CREATE TABLE leader(
+	id_cd	integer	NOT NULL,
+	id_lead	integer	NOT NULL,
+	
+	PRIMARY KEY(id_cd,id_lead),
+	FOREIGN KEY(id_cd)	REFERENCES cd(id_cd),
+	FOREIGN KEY(id_lead)	REFERENCES pers(id_pers)
+);
+
+CREATE TABLE compo(
+	id_cd	integer	NOT NULL,
+	id_enr	integer NOT NULL,
+	id_compo	integer NOT NULL,
+
+	PRIMARY KEY(id_cd,id_enr,id_compo),
+	--FOREIGN KEY(id_cd)	REFERENCES cd(id_cd),
+	FOREIGN KEY(id_enr,id_cd)	REFERENCES enr,
+	FOREIGN KEY(id_compo)	REFERENCES pers(id_pers)
+);
+
+
+

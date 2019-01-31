@@ -1,0 +1,21 @@
+#affiche{ 
+	position:absolute;
+	left:10%;
+	top:10%;
+}
+
+#presentation{
+	position:absolute;
+	left:30%;
+	top:15%;
+	font-family: 'Helvetica Neue', sans-serif;
+	text-align: left;
+	font-size: 14px;
+ 	margin: 0 0 72px;
+}
+
+#synopsis{
+	position:absolute;
+	right:1px;
+}
+

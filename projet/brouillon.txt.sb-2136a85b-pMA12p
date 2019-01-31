@@ -1,0 +1,62 @@
+
+CREATE TABLE utilisateur(
+	id_user	integer	PRIMARY KEY,
+	nom_user	varchar(20),
+	prenom_user	varchar(20),
+	ddn_user	date,
+);
+
+CREATE TABLE sujet(
+	id_sujet	integer	PRIMARY KEY,
+	id_user	integer,
+	nb_post	integer,
+	FOREIGN KEY(id_user)	REFERENCES	utilisateur(id_user)
+);
+
+CREATE TABLE acteur(
+	id_acteur	integer	PRIMARY KEY,
+	nom_acteur	varchar(20),
+	prenom_acteur	varchar(20),
+	ddn_acteur	date
+);
+
+CREATE TABLE film(
+	id_film	integer,
+	nom_film	varchar(20),
+	nom_real	varchar(20),
+	genre_film	varchar(30),
+	année_sortie	date,
+	type_film	varchar(20),
+	nom_prod	varchar(20)
+);
+
+CREATE TABLE act_film(
+	id_film integer,
+	id_acteur integer,
+	PRIMARY KEY(id_film,id_acteur),
+	FOREIGN KEY(id_film)	REFERENCES	film(id_film),
+	FOREIGN KEY(id_acteur)	REFERENCES	acteur(id_acteur)
+);
+
+CREATE TABLE ref_suj(
+	id_film	integer,
+	id_sujet	integer,
+	PRIMARY KEY(id_film,id_sujet),
+	FOREIGN KEY(id_film)	REFERENCES	film(id_film),
+	FOREIGN KEY(id_sujet)	REFERENCES	sujet(id_sujet)
+);
+	
+CREATE TABLE post(
+	id_user integer,
+	id_post	integer,
+	id_sujet	integer,	
+	contenu	varchar(1000),
+	typepost	varchar(1) CHECK typepost IN('Q','R'),
+	nbrep	integer,
+	reponse	integer,
+	FOREIGN KEY id_user	REFERENCES	utilisateur(id_user),
+	FOREIGN KEY reponse	REFERENCES	post(id_post),
+	FOREIGN	KEY id_sujet	REFERENCES	sujet(id_sujet),
+	PRIMARY KEY(id_user,id_post,id_sujet)
+);
+

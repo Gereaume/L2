@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Des fonctions sur les tableaux</title>
+	<meta charset ="utf-8" />
+</head>
+<body>
+	<h1>les tableaux en JS</h1>
+	<script>
+		/* Affiche le contenu d'un tableau en HTML */
+		function affiche_tableau(t) {
+			document.write("<p>");
+			for(var i=0;t[i];i++){
+				document.write(t[i] + " ");
+			}
+			document.write("</p>");
+		}
+		/* Calcule et affiche la moyenne des éléments d'un tableau */
+		function affiche_moyenne (t) { 
+			var moy =0;
+			for(var i=0; t[i]; i++)
+				moy +=t[i];
+			moy = moy/i;
+			
+			document.write("<p></p> La moyenne est de : ",moy);
+		}
+		
+		
+		/* Compte et affiche le nombre d'apparitions d'un élément dans un tableau */
+		function occurences(x,t) {
+			var compt =0;
+			for(var i=0; t[i]; i++){
+				if(t[i]==x)
+					compt++;
+			}
+			document.write("<p></p> Il y a "+compt+" "+x+" dans le tableau");
+		}
+		
+		
+		/* Compte et affiche combien ont eu 10 ou plus */
+		function oneulamoyenne (t) {
+			var compt =0;
+			for(var i=0; t[i]; i++){
+					if(t[i]>=10)
+						compt++;
+			}
+			document.write("<p></p> Il y a "+compt+" élèves qui ont la moyenne");
+			
+		}
+		
+		
+		/* Indique si un élément est présent dans un tableau ou non */
+		function recherche (x,t) {
+			for(var i=0; t[i]; i++){
+				if(t[i]==x){
+					document.write("<p> La valeur "+x+" a été trouvé au rang "+i+" </p>");
+					return 1;
+				}
+			}
+			document.write("<p> La valeur "+x+" n'a pas été trouvé </p>");
+
+		}
+	
+		/* Appels aux fonctions définies ci-dessus */
+		var notes=[13,11,9,4,18,3,11,17,10];
+		affiche_tableau(notes);
+		affiche_moyenne(notes);
+		occurences(11,notes);
+		oneulamoyenne(notes);
+		recherche(18,notes);
+	
+	</script>
+</body>
+</html>

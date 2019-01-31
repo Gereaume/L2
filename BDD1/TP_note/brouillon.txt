@@ -1,0 +1,39 @@
+
+CREATE TABLE modele(
+	id_modele	integer	NOT NULL	PRIMARY KEY,
+	nom_modele	varchar(20)	NOT NULL,
+	nb_pers	integer	DEFAULT 1,
+	type_carbu	varchar(10),
+	type_bdv	varchar(1)	CHECK(type_bdv IN ('A','M')),
+	pds	integer,
+	id_permis_mod	integer,
+	FOREIGN KEY(id_permis_mod)	REFERENCES permis(id_permis),
+	CHECK(nb_pers<122 AND nb_pers>0)
+);
+
+
+
+
+
+
+
+
+
+
+INSERT INTO plein(type_carbu VALUES(select type_carbu from modele where id_modele = (select id_modele from vehicule where id_vehicule = (select id_vehicule from plein where type_carbu = NULL))));
+
+update plein set type_carbu=(select type_carbu from modele where id_modele = (select id_modele from vehicule where id_vehicule = (select distinct(id_vehicule) from plein where id_vehicule = )));
+
+UPDATE plein SET type_carbu=(select type_carbu from modele where id_modele =(select id_modele from vehicule where id_vehicule = plein.id_vehicule));
+
+x37 = 1/ 12
+
+z12 = 2 / 11q
+
+ select id_vehicule from plein where (current_date - date_p < 122) and (id_vehicule =(select id_vehicule from vehicule where id_modele =(select id_modele from modele where nom_modele ='cargo YT-1300'))); 
+
+
+select nom_zone2 from distance where parsec<11 and (nom_zone1 =(select nom_zone from station where nom_station = 'Coruscant'));
+UPDATE station SET nom_zone_s = 
+
+

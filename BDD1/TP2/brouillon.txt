@@ -1,0 +1,105 @@
+CREATE TABLE avion(
+	id_avion	integer	PRIMARY KEY,
+	nom_type	varchar(20),
+	nb_place	integer,
+	nom_aero_ratt	varchar(30)
+);
+
+CREATE TABLE pilote(
+	id_pilote	integer	PRIMARY KEY,
+	nom_pilote	varchar(30),
+	nom_aero	varchar(30)
+);
+
+CREATE TABLE vol(
+	id_vol	integer	PRIMARY KEY,
+	id_pilote	integer,	
+	id_avion	integer,
+	loc_dep	varchar(30),
+	loc_arr	varchar(30),
+	heure_dep	varchar(10),
+	heure_arr	varchar(10),
+	FOREIGN KEY(id_avion) REFERENCES avion(id_avion),
+	FOREIGN KEY(id_pilote) REFERENCES pilote(id_pilote)
+	
+);
+\i '/info/etu/l2info/s161440/BDD1/TP2/insert_avions_1.txt' 
+
+V2.0
+
+ALTER TABLE avion ADD COLUMN id_type integer;
+ALTER TABLE avion ADD COLUMN id_aero integer;
+ALTER TABLE vol ADD COLUMN id_aero_dep integer;
+ALTER TABLE vol ADD COLUMN id_aero_arr integer;
+
+
+CREATE TABLE type(
+	nom_type	varchar(20),
+	nb_place	integer,
+	id_type	serial	PRIMARY KEY
+);
+
+CREATE TABLE licence_type(
+	nom_licence	varchar(20),
+	id_type	serial,
+	PRIMARY KEY(nom_licence,id_type),
+	FOREIGN KEY(id_type) REFERENCES type(id_type)
+);
+
+CREATE TABLE licence_pilote(
+	id_pilote	integer,
+	nom_licence	varchar(20),
+	PRIMARY KEY(nom_licence,id_pilote),
+	FOREIGN KEY(id_pilote) REFERENCES pilote(id_pilote)
+);
+
+CREATE TABLE aeroport(
+	nom_aero	varchar(30),
+	nom_ville	varchar(30),
+	id_aero	serial	PRIMARY KEY
+);
+	
+
+	UPDATE avion SET id_aero=(SELECT id_aero FROM aeroport WHERE nom_aero LIKE(nom_aero_ratt));
+
+	UPDATE avion SET id_type=(SELECT id_type FROM type WHERE type.nom_type LIKE(avion.nom_type));
+
+	UPDATE vol SET id_aero_dep=(SELECT id_aero FROM aeroport WHERE nom_aero LIKE(loc_dep));
+
+	UPDATE vol SET id_aero_arr=(SELECT id_aero FROM aeroport WHERE nom_aero LIKE(loc_arr));
+
+	ALTER TABLE avion DROP COLUMN nb_place;
+	ALTER TABLE avion DROP COLUMN nom_type;
+	ALTER TABLE avion DROP COLUMN loc_avion;
+
+	ALTER TABLE vol DROP COLUMN loc_dep;
+	ALTER TABLE vol DROP COLUMN loc_arr;
+
+
+
+
+ps:
+
+SELECT distinct(nom_type),nb_place from avion;
+INSERT INTO type VALUES('B747',248,Default);
+INSERT INTO type VALUES('A320',320,Default);
+INSERT INTO type VALUES('Foker100',100,Default);
+INSERT INTO type VALUES('A300',300,Default);
+INSERT INTO type VALUES('ATR44',144,Default);
+INSERT INTO type VALUES('A310',310,Default);
+
+
+INSERT INTO aeroport VALUES('Marignane','Marseille',1);
+INSERT INTO aeroport VALUES('Lyon','Lyon',2);
+INSERT INTO aeroport VALUES('Nancy','Nancy',3);
+INSERT INTO aeroport VALUES('Avignon','Avignon',4);
+INSERT INTO aeroport VALUES('Roissy','Paris',5);
+INSERT INTO aeroport VALUES('Strasbourg','Strasbourg',6);
+INSERT INTO aeroport VALUES('Toulouse','Toulouse',7);
+INSERT INTO aeroport VALUES('Orly','Paris',8);
+INSERT INTO aeroport VALUES('Bordeaux','Bordeaux',9);
+
+SELECT loc_arr,loc_dep FROM vol;
+
+
+update aeroport SET nom_aero =(select distinct(nom_aero_ratt) FROM avion);

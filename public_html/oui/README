@@ -1,0 +1,53 @@
+	EDEL Thomas		thomas.edel.etu@univ-lemans.fr
+	DURAND Pierre	pierre.durand.etu@univ-lemans.fr
+
+Tables :
+	
+	JK_EDEL_utilisateur : id, nom, prenom, login, mdp, mail, naissance, Admin
+	JK_EDEL_billets : id, titre,contenu,auteur,date
+	JK_EDEL_commentaires : id, id_billet, auteur, commentaire, date
+
+Adresse du site :
+	
+	info.univ-lemans.fr/~l2info010/ASIMOV
+
+Autre :
+
+	Répartion des tâches :
+		Thomas : Traitements php (inscription, connexion,...)
+		Pierre : Css et concordance générale des pages du site
+	
+
+	Utilisateur :
+		(parth72 / azerty) est un compte admin
+		(parth2 / azerty) est un compte utilisateur
+	
+
+	Fonctionnalités :
+		Css pour l'impression
+		
+		Pages non membre :	accueil,
+							contact,
+							inscription,
+							connexion,
+							consultation des billets et des commentaires sur le forum
+		
+		Pages membre :	Connexion,
+						déconnexion,
+						profil,
+						poster des billets et des commentaires sur le forum
+		
+		Page admin :	Suppression des billets et commentaires sur le forum
+		
+		L'espace forum affiche les 5 derniers billets du plus récent au plus vieux.
+		
+		Chaque billet possede un espace commentaire et peut etre supprimé uniquement par un admin.
+		
+		Dans l'espace commentaire d'un billet, nous pouvons consulter ce dernier ainsi que tout les commentaires qui y sont lié. 
+		Les commetaires sont affichés du plus vieux au plus récent.
+		
+		La pages "profil" n'est accessible qu'aux membres connectés, un message avec un lien vers la page de connexion demande a l'utilisateur de se connecter.
+		
+		Un utilisateur non connecté sur le forum ou dans un espace commentaire est invité via un message similaire au précédent à se connecter pour pouvoir poster.
+		
+		EREEUR ==> La page contact affiche les massages d'erreurs comme elle se doit, mais le mail n'est pas recu.

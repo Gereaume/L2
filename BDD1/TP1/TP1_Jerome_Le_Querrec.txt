@@ -1,0 +1,95 @@
+ssh info
+
+psql --u u20161400 --d booktown
+
+1.
+	\l
+2.
+	psql --u u20161440 --d booktown
+3.
+	23 tables
+4.
+	\d auteurs
+5.
+	\?
+6.
+	\h
+7.
+	\h CREATE TABLE
+8.
+	\c emp_u20161440
+9.
+	\!
+Implémentation
+
+1.
+CREATE TABLE grade(
+	id_grade integer PRIMARY KEY,
+	min_sal integer NOT NULL,
+	max_sal integer NOT NULL
+);
+2.
+	INSERT INTO grade values (1,'1200','1400');
+	INSERT INTO grade values (2,'1401','1600');
+	INSERT INTO grade values (3,'1601','2000');
+	INSERT INTO grade values (4,'2001','3500');
+	INSERT INTO grade values (5,'3501','100000');
+3.	
+CREATE TABLE dep(
+	id_dep serial PRIMARY KEY,
+	nom_dep varchar(50),
+	loc varchar(50)
+);
+4.
+	INSERT INTO dep values (DEFAULT,'Comptable','New York');
+	INSERT INTO dep values (DEFAULT,'Recherche','Dallas');
+	INSERT INTO dep values (DEFAULT,'Ventes','Chicago');
+	INSERT INTO dep values (DEFAULT,'Operations','Boston');
+5.
+CREATE TABLE emp(
+	id_emp integer PRIMARY KEY,
+	nom_emp varchar(20) NOT NULL,
+	metier varchar(20) NOT NULL,
+	id_chef integer,
+	date_emb date NOT NULL,
+	sal numeric(7,2),
+	comm integer,
+	id_dep integer,
+	
+	FOREIGN KEY(id_dep) REFERENCES dep(id_dep)
+);
+6.
+	ALTER TABLE emp ADD CONSTRAINT id_chef FOREIGN KEY(id_chef) REFERENCES emp(id_emp);
+7.
+	\i Script_Insert_Employes.txt
+
+8.a
+	SELECT nom_emp FROM emp where sal>'1600';
+
+
+  b.
+	SELECT * FROM emp where metier IN  ('Secretaire','Vendeur','Analyste');
+
+  c.
+	SELECT DISTINCT metier FROM emp;
+
+  d.
+	SELECT nom_emp FROM emp where nom_emp like '%A%';
+
+  e.
+	SELECT nom_emp FROM emp where nom_emp like '_A%';
+
+  f.
+	SELECT nom_emp FROM emp where metier='Vendeur' OR id_chef=7698;
+
+  g.
+	SELECT nom_emp FROM emp where metier='Vendeur' AND id_chef=7698; 
+
+  i.
+	SELECT * FROM emp WHERE metier LIKE 'Vendeur' AND comm IN (0,NULL);
+
+  j.
+	SELECT * FROM emp WHERE (metier like 'Manager') OR (metier like 'Secretaire' and id_dep = 10);
+
+9.
+	ALTER TABLE dep ADD COLUMN directeur varchar(20);

@@ -1,0 +1,46 @@
+CREATE TABLE personne(
+	id_pers	serial	PRIMARY KEY,
+	nom	varchar(30),
+	prenom	varchar(30)
+);
+
+CREATE TABLE prof(
+	id_pers	serial	PRIMARY KEY,
+	date_arr	varchar(10),
+	FOREIGN KEY(id_pers) REFERENCES personne(id_pers)
+);
+
+CREATE TABLE promo(
+	id_promo	serial	PRIMARY KEY,
+	niveau_promo	varchar(2) IN(,
+	nom_filiere	varchar(30),
+	nom_ufr	varchar(30),
+	CONSTRAINT lic CHECK ((niveau_promo LIKE 'L%') or (niveau_promo LIKE 'M%') or (niveau_promo LIKE'D%') or (niveau_promo LIKE '%1') or (niveau_promo LIKE '%2') or ( niveau_promo LIKE '%3')),
+);
+
+CREATE TABLE scolarite(
+	id_promo	serial,
+	annee	integer(4) annee > 2000 AND annee < 2150,
+	id_etudiant	serial,
+	moyenne	numeric(2,2),
+	PRIMARY KEY(annee,id_etudiant),
+	FOREIGN KEY(id_promo) REFERENCES promo(id_promo),
+	FOREIGN KEY(id_etudiant) REFERENCES personne(id_per)
+);
+
+CREATE TABLE module(
+	id_module	serial PRIMARY KEY,
+	nom_module	varchar(30),
+	dsc_module	varchar(200)
+);
+
+CREATE TABLE enseignement(
+	id_promo	serial,
+	id_prof	serial,
+	annee	integer(4),
+	id_matiere	serial,
+	PRIMARY KEY(id_promo,id_prof,annee),
+	FOREIGN KEY(id_promo) REFERENCES promo(id_promo),
+	FOREIGN KEY(id_prof) REFERENCES personne(id_pers),
+	FOREIGN KEY(annee) REFERENCES scolarite(annee)
+);

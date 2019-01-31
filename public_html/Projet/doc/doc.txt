@@ -1,0 +1,16 @@
+_x_ =  primary key
+
+utilisateur(_id_user_,nom_user,prenom_user,ddn_user).
+
+sujet(_id_sujet_,#id_user,nb_post).
+
+acteur(_id_acteur_,nom_acteur,prenom_acteur,ddn_acteur).
+
+film(_id_film_,nom_film,nom_real,genre_film,année_sortie,type_film,nom_prod).
+
+act_film(_#id_film_,_#id_acteur_).
+
+ref_suj(_#id_film_,_#id_sujet_).
+
+post(_id_post_,_#id_sujet_,_#id_user_,contenu,type_post,nb_rep,reponse).
+	

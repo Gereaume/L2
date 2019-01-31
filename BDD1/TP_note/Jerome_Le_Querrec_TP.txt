@@ -1,0 +1,86 @@
+ssh info
+psql --u u20161440 --d sw7_u20161440
+
+1)
+-- MODELE (id_modele, nom_modele, nb_pers, type_carbu, type_bdv, pds, #id_permis_mod)
+CREATE TABLE modele (
+	id_modele SERIAL	NOT NULL	PRIMARY KEY,
+	nom_modele VARCHAR(30)	NOT NULL,
+	nb_pers INTEGER	DEFAULT 1,
+	type_carbu VARCHAR(10),
+	type_bdv VARCHAR(1)	CHECK(type_bdv IN('A','M')),
+	pds INTEGER,
+	id_permis_mod BIGINT,
+	FOREIGN KEY(id_permis_mod)	REFERENCES permis(id_permis),
+	CHECK(nb_pers<122 AND nb_pers>0)
+ );
+2)
+	TABLE PLEIN :
+    PRIMARY KEY(id_vehicule,id_plein),
+    FOREIGN KEY(id_vehicule)	REFERENCES vehicule(id_vehicule)
+	
+	TABLE ENTRETIEN :
+    PRIMARY KEY(id_vehicule,id_entretien),
+    FOREIGN KEY(id_vehicule)	REFERENCES vehicule(id_vehicule)
+
+	TABLE HABILITATION :
+    PRIMARY KEY(id_chauffeur,id_permis_chauf),
+    FOREIGN KEY(id_chauffeur)	REFERENCES chauffeur(id_chauffeur),
+    FOREIGN KEY(id_permis_chauf)	REFERENCES permis(id_permis)
+3)
+
+CREATE TABLE position(
+	id_vehicule	serial NOT NULL,
+	date	date,
+	th	integer	CHECK(th > 0 AND th < 4),
+	id_chauffeur	serial,
+	nom_zone_p	varchar(20),
+	PRIMARY KEY(id_vehicule,date,th),
+	FOREIGN KEY(id_vehicule)	REFERENCES vehicule(id_vehicule),
+	FOREIGN KEY(id_chauffeur)	REFERENCES chauffeur(id_chauffeur)
+); 
+                      
+4)
+
+CREATE TABLE distance(
+	nom_zone1	varchar(20),
+	nom_zone2	varchar(20),
+	persec	integer,
+	
+);
+
+
+\i '/info/etu/l2info/s161440/BDD1/TP_note/script'
+
+
+5)
+select COUNT(id_vehicule) FROM entretien where date_part('year',date_e) = 2018;
+
+6)
+
+7)
+a)ALTER TABLE plein add column type_carbu( varchar(10) );
+
+b)UPDATE plein SET type_carbu=(select type_carbu from modele where id_modele =(select id_modele from vehicule where id_vehicule = plein.id_vehicule));
+
+8)
+a) 
+
+b)
+
+9)
+select id_vehicule from plein where (current_date-date_p<122) and (id_vehicule = any(select id_vehicule from vehicule where id_modele =(select id_modele from modele where nom_modele ='cargo YT-1300')));
+
+	
+10)
+select sum(qte_carbu)*100/sum(nb_km) as conso_moyenne from plein where id_vehicule = any(select id_vehicule from vehicule where id_modele =(select id_modele from modele where nom_modele ='voilier solaire geonosien'));
+
+11)
+
+select nom_zone2 from distance where persec<11 and (nom_zone1 =(select nom_zone_s from station where nom_station = 'Coruscant'));
+
+
+12)
+select position.id_vehicule from position natural join entretien where (nom_zone_p != 'NULL') and ((descr LIKE 'vidange') and (current_date-date_e<244));
+
+

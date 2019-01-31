@@ -1,0 +1,28 @@
+
+INSERT INTO licence_pilote VALUES (10, 'BO');
+INSERT INTO licence_pilote VALUES (11, 'AA');
+INSERT INTO licence_pilote VALUES (12, 'BO');
+INSERT INTO licence_pilote VALUES (13, 'AB');
+INSERT INTO licence_pilote VALUES (13, 'AT');
+INSERT INTO licence_pilote VALUES (14, 'AT');
+INSERT INTO licence_pilote VALUES (15, 'AT');
+INSERT INTO licence_pilote VALUES (15, 'BO');
+INSERT INTO licence_pilote VALUES (16, 'AA');
+INSERT INTO licence_pilote VALUES (16, 'BT');
+INSERT INTO licence_pilote VALUES (17, 'AA');
+INSERT INTO licence_pilote VALUES (18, 'BO');
+
+
+INSERT INTO licence_type VALUES ('AA', (select id_type from type where nom_type='Foker100'));
+INSERT INTO licence_type VALUES ('AA', (select id_type from type where nom_type='A300'));
+INSERT INTO licence_type VALUES ('AA', (select id_type from type where nom_type='B747'));
+INSERT INTO licence_type VALUES ('AA', (select id_type from type where nom_type='ATR44'));
+INSERT INTO licence_type VALUES ('BO', (select id_type from type where nom_type='A320'));
+INSERT INTO licence_type VALUES ('AT', (select id_type from type where nom_type='A310'));
+INSERT INTO licence_type VALUES ('AT', (select id_type from type where nom_type='ATR42'));
+INSERT INTO licence_type VALUES ('AB', (select id_type from type where nom_type='Foker100'));
+INSERT INTO licence_type VALUES ('AB', (select id_type from type where nom_type='A300'));
+INSERT INTO licence_type VALUES ('AB', (select id_type from type where nom_type='B747'));
+INSERT INTO licence_type VALUES ('AB', (select id_type from type where nom_type='ATR44'));
+INSERT INTO licence_type VALUES ('AB', (select id_type from type where nom_type='A320'));
+

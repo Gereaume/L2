@@ -1,0 +1,4 @@
+EXO1.
+menu(risotto,Y,Z,_),480<Z,Z<580.
+menu(risotto,Y,_,Z),Z=<16.
+EXO2.

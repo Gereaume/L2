@@ -1,0 +1,94 @@
+1)
+CREATE TABLE avion(
+	id_avion	integer	PRIMARY KEY,
+	nom_type	varchar(20),
+	nb_place	integer,
+	nom_aero_ratt	varchar(30)
+);
+
+CREATE TABLE pilote(
+	id_pilote	integer	PRIMARY KEY,
+	nom_pilote	varchar(30),
+	nom_aero	varchar(30)
+);
+
+CREATE TABLE vol(
+	id_vol	integer	PRIMARY KEY,
+	id_pilote	integer,	
+	id_avion	integer,
+	loc_dep	varchar(30),
+	loc_arr	varchar(30),
+	heure_dep	time,
+	heure_arr	time,
+	FOREIGN KEY(id_avion) REFERENCES avion(id_avion),
+	FOREIGN KEY(id_pilote) REFERENCES pilote(id_pilote)
+	
+);
+
+2) 
+	\i '/info/etu/l2info/s161440/BDD1/TP2/insert_avions_1.txt' 
+
+3)
+	a)
+	SELECT nom_pilote FROM pilote WHERE id_pilote = ANY(SELECT id_pilote FROM vol WHERE loc_dep LIKE 'Paris Orly');
+
+	b)
+	SELECT id_avion,nom_aero_ratt FROM avion WHERE nb_place>200 AND nom_aero_ratt NOT LIKE '%Paris%';
+	
+	c)
+	SELECT count(id_avion) FROM avion WHERE nom_type LIKE '%A%'AND id_avion=ANY(SELECT id_avion FROM vol WHERE loc_arr IN('%Paris%','Toulouse','Lyon'));
+
+	d)
+	1)
+	SELECT nom_pilote FROM pilote WHERE id_pilote = ANY(SELECT id_pilote FROM vol WHERE id_avion= ANY(SELECT id_avion FROM avion WHERE nom_type like '%ATR%'));
+	2)
+	
+	e)
+	SELECT loc_arr FROM vol WHERE loc_dep LIKE '%Paris%' AND id_avion = ANY(SELECT id_avion FROM avion WHERE nb_place > ANY(SELECT nb_place FROM avion WHERE nom_type LIKE 'A300'));
+
+	f)
+	SELECT SUM(nb_place) as nb_touristes FROM avion WHERE id_avion = ANY(SELECT id_avion FROM vol WHERE loc_arr LIKE '%Marseille%' and loc_dep LIKE '%Marseille%'  and (heure_arr > '16:00' and heure_arr <'18:00')); 
+
+	
+	g)
+	SELECT * FROM pilote WHERE id_pilote !=ALL(SELECT id_pilote FROM vol);
+
+	h)
+	SELECT DISTINCT p.nom_pilote || ' - ' || pil.nom_pilote AS  paire
+FROM pilote AS p INNER JOIN pilote AS pil ON p.nom_pilote < pil.nom_pilote
+WHERE p.nom_aero=pil.nom_aero;
+
+DEUXIEME VERSION
+
+ALTER TABLE avion ADD COLUMN id_type integer;
+ALTER TABLE avion ADD COLUMN id_aero integer;
+ALTER TABLE vol ADD COLUMN id_aero_dep integer;
+ALTER TABLE vol ADD COLUMN id_aero_arr integer;
+
+
+CREATE TABLE type(
+	nom_type	varchar(20),
+	nb_place	integer,
+	id_type	serial	PRIMARY KEY
+);
+
+CREATE TABLE licence_type(
+	nom_licence	varchar(20),
+	id_type	serial,
+	PRIMARY KEY(nom_licence,id_type),
+	FOREIGN KEY(id_type) REFERENCES type(id_type)
+);
+
+CREATE TABLE licence_pilote(
+	id_pilote	integer,
+	nom_licence	varchar(20),
+	PRIMARY KEY(nom_licence,id_pilote),
+	FOREIGN KEY(id_pilote) REFERENCES pilote(id_pilote)
+);
+
+CREATE TABLE aeroport(
+	nom_aero	varchar(30),
+	nom_ville	varchar(30),
+	id_aero	serial	PRIMARY KEY
+);
+	

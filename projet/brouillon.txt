@@ -1,0 +1,57 @@
+
+CREATE TABLE TI_RICHER_utilisateur(
+	id_user	integer	PRIMARY KEY,
+	nom_user	varchar(30),
+	prenom_user	varchar(30),
+	ddn_user	date,
+	pseudo_user	varchar(30),
+	mdp_user	varchar(30)
+);
+
+CREATE TABLE TI_RICHER_sujet(
+	id_sujet	integer	PRIMARY KEY,
+	id_user	integer	REFERENCES	TI_RICHER_utilisateur(id_user)
+);
+
+CREATE TABLE TI_RICHER_acteur(
+	id_acteur	integer	PRIMARY KEY,
+	nom_acteur	varchar(20),
+	prenom_acteur	varchar(20),
+	ddn_acteur	date
+);
+
+CREATE TABLE TI_RICHER_film(
+	id_film	integer	PRIMARY KEY,
+	nom_film	varchar(100),
+	nom_real	varchar(20),
+	genre_film	varchar(30),
+	année_sortie	date,
+	type_film	varchar(20),
+	nom_prod	varchar(20)
+);
+
+CREATE TABLE TI_RICHER_act_film(
+	id_film integer,
+	id_acteur integer,
+	PRIMARY KEY(id_film,id_acteur),
+	FOREIGN KEY(id_film)	REFERENCES	TI_RICHER_film(id_film),
+	FOREIGN KEY(id_acteur)	REFERENCES	TI_RICHER_acteur(id_acteur)
+);
+
+CREATE TABLE TI_RICHER_ref_suj(
+	id_film	integer REFERENCES	TI_RICHER_film(id_film),
+	id_sujet	integer REFERENCES	TI_RICHER_sujet(id_sujet),
+	PRIMARY KEY(id_film,id_sujet)
+);
+	
+CREATE TABLE TI_RICHER_post(
+	id_user integer	REFERENCES	TI_RICHER_utilisateur(id_user),
+	id_post	integer	REFERENCES	TI_RICHER_post(id_post),
+	id_sujet	integer	REFERENCES	TI_RICHER_sujet(id_sujet),	
+	contenu	varchar(1000),
+	typepost	varchar(1) CHECK typepost IN('Q','R'),
+	nbrep	integer,
+	reponse	integer,
+	PRIMARY KEY(id_user,id_post,id_sujet)
+);
+

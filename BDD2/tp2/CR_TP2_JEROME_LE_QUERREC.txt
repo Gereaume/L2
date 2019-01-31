@@ -1,0 +1,61 @@
+
+PARTIE 1.
+ROLE
+1)
+	ALTER ROLE u161440 WITH PASSWORD 'toto29';
+
+2)
+	a)
+	CREATE ROLE g4018;
+	b)
+	GRANT g4018 TO u20161440,u20175418;
+SCHEMA
+3)
+	DROP SCHEMA public;
+4)
+	CREATE SCHEMA g4018;
+	CREATE SCHEMA u20175418;
+
+PRIVILEGES
+5)
+	REVOKE all ON DATABASE bd_u20161440 FROM public;
+	GRANT all ON DATABASE bd_u20161440 TO u20161440,u20175418,g4018;
+	
+6)
+	GRANT create,usage ON SCHEMA u20175418 TO u20175418
+	GRANT all ON SCHEMA g4018 TO g4018;
+	GRANT usage ON SCHEMA all TO g4018;
+
+
+
+PARTIE 2.
+
+	SET search_path TO "jeu";
+SEQUENCE
+10)
+	a)
+	SELECT MAX(puissance) FROM objet;
+	b)c)
+	CREATE SEQUENCE seq_puiss INCREMENT by 10 START with 150 OWNED BY objet.puissance;
+	
+
+FONCTION
+11)
+	CREATE FUNCTION obj_plus_cher(param1 integer) RETURNS integer AS' 
+	SELECT max(prix) FROM objet WHERE id_objet = ANY(SELECT id_objet FROM stock WHERE id_visiteur = param1);
+	'LANGUAGE sql;
+		
+12)
+	select obj_plus_cher(1);
+	select obj_plus_cher((SELECT id_visiteur FROM visiteur WHERE login= 'Ian'));
+13)
+	CREATE FUNCTION partie_cours(nom_av varchar(30)) RETURNS setof record AS'
+	SELECT nom_jeu,role,highscore FROM partie NATURAL JOIN jeu WHERE id_avatar = all(SELECT id_avatar FROM avatar WHERE nom_avatar=nom_av);
+	'LANGUAGE sql;
+
+14)
+	SELECT partie_cours('Hector');
+	SELECT partie_cours('Ayas');
+MODIFICATION DE LA BASE DE DONNEES
+15)
+

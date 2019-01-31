@@ -1,0 +1,80 @@
+DATABASE :
+	1 :	CREATE DATABASE;
+		CREATE SCHEMA schema1;	
+		Il faut des droits administrateur.
+
+SCHEMA : 
+	2 : 	CREATE SCHEMA bd_u20161440;
+		CREATE SCHEMA jeu;
+	
+	3 : 	SET search_path TO jeu,bd_u20161440;
+	
+	4 : 	DROP SCHEMA public;
+		
+TABLES
+	
+	5 : a -	
+CREATE TABLE jeu (
+	id_jeu serial PRIMARY KEY,
+	nom_jeu varchar(20),
+	type varchar(30) CHECK(type IN('role','plateau','tower defense','MMORPG','Autre')),
+	nb_joueur integer
+);
+
+	    b -
+CREATE TABLE partie (
+	id_avatar bigint REFERENCES avatar,
+	id_jeu bigint REFERENCES jeu,
+	role varchar(10),
+	highscore integer,
+	PRIMARY KEY (id_avatar,id_jeu)
+);
+
+	    c -
+CREATE TABLE save (
+	id_avatar bigint REFERENCES avatar,
+	id_jeu bigint REFERENCES jeu,
+	date_s date,
+	nb_pv integer,
+	fichier varchar(50) UNIQUE NOT NULL,
+	PRIMARY KEY (id_avatar,id_jeu,date_s)
+);
+
+	6 : mail varchar(50) CHECK(mail LIKE '%@%'),
+
+	7 : 
+CREATE TABLE localisation (
+	id_loc serial PRIMARY KEY,
+	code_postal integer,
+	nom_loc varchar(50)
+);
+	8 : 
+INSERT INTO localisation VALUES (DEFAULT,13100,'Aix en Provence');
+INSERT INTO localisation VALUES (DEFAULT,72250,'Brette les Pins');
+INSERT INTO localisation VALUES (DEFAULT,09000,'Foix');
+INSERT INTO localisation VALUES (DEFAULT,54000,'Nancy');
+INSERT INTO localisation VALUES (DEFAULT,59640,'Dunkerque');
+INSERT INTO localisation VALUES (DEFAULT,38000,'Grenoble');
+INSERT INTO localisation VALUES (DEFAULT,74000,'Annecy');
+	9 : \i BDDS4/TP1/insert.txt
+
+	10:
+ALTER TABLE visiteur ADD COLUMN id_ville bigint;
+UPDATE visiteur SET id_ville=(SELECT id_loc FROM localisation WHERE ville=nom_loc);
+ALTER TABLE visiteur DROP COLUMN ville;
+ALTER TABLE visiteur ADD CONSTRAINT fk_loc FOREIGN KEY(id_ville) REFERENCES localisation(id_loc);
+
+	11: 
+UPDATE visiteur SET id_ville = (SELECT id_loc FROM localisation WHERE nom_loc= 'Aix en Provence' ) WHERE login = 'Ian';
+UPDATE visiteur SET id_ville = (SELECT id_loc FROM localisation WHERE nom_loc= 'Brette les Pins' ) WHERE login = 'Sean';
+
+	12: 
+ALTER TABLE jeu RENAME COLUMN nb_joueur TO nb_joueur_max;
+	13:
+SELECT nom_avatar, nom_race FROM avatar FULL OUTER JOIN race on avatar.id_race=race.id_race;
+	14:
+SELECT id_avatar FROM avatar NATURAL JOIN partie NATURAL JOIN jeu WHERE nom_jeu='League of Angels';
+	15:
+SELECT id_visiteur, count(id_visiteur) AS "nb avatars" FROM visiteur NATURAL JOIN avatar GROUP BY id_visiteur;
+	16:
+SELECT nom_objet FROM objet NATURAL JOIN stock NATURAL JOIN visiteur WHERE login = 'Elijah';

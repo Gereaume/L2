@@ -1,0 +1,289 @@
+DROP TABLE IF EXISTS station;
+
+-- STATION (id_station, nom_station, nom_zone_s)                          
+CREATE TABLE station (
+    id_station SERIAL PRIMARY KEY,
+    nom_station VARCHAR(30) NOT NULL,
+    nom_zone_s VARCHAR(15)
+);
+
+INSERT INTO station VALUES
+    (DEFAULT,'Tatooine','Arkanis'),
+    (DEFAULT,'Geonosis','caadavine'),
+    (DEFAULT,'Naboo','Chommel'),
+    (DEFAULT,'Dagobah','Sluis'),
+    (DEFAULT,'Mustafar','Mayagil'),
+    (DEFAULT,'Coruscant','Core Words');
+
+
+----
+DROP TABLE IF EXISTS permis;
+
+-- PERMIS (id_permis, cat_permis, desc_permis)                          
+CREATE TABLE permis (
+    id_permis serial PRIMARY KEY,
+    cat_permis VARCHAR(5) NOT NULL,
+    desc_permis VARCHAR(100)
+);
+
+INSERT INTO permis VALUES
+    (DEFAULT,'CL',NULL),
+    (DEFAULT,'GP',NULL),
+    (DEFAULT,'CC',NULL),
+    (DEFAULT,'SC',NULL),
+    (DEFAULT,'DI',NULL),
+    (DEFAULT,'BG',NULL);
+
+
+----
+DROP TABLE IF EXISTS modele;
+
+-- MODELE (id_modele, nom_modele, nb_pers, type_carbu, type_bdv, pds, #id_permis_mod)
+CREATE TABLE modele (
+	id_modele SERIAL	NOT NULL	PRIMARY KEY,
+	nom_modele VARCHAR(30)	NOT NULL,
+	nb_pers INTEGER	DEFAULT 1,
+	type_carbu VARCHAR(10),
+	type_bdv VARCHAR(1)	CHECK(type_bdv IN('A','M')),
+	pds INTEGER,
+	id_permis_mod BIGINT,
+	FOREIGN KEY(id_permis_mod)	REFERENCES permis(id_permis),
+	CHECK(nb_pers<122 AND nb_pers>0)
+ );
+
+                     
+                     
+INSERT INTO modele VALUES
+    (1, 'cargo YT-1300', 6, 'X37', 'M', 1200, (select id_permis from permis where cat_permis='CL')),
+    (2, 'voilier solaire geonosien', 20, 'Z12','A', 8500,(select id_permis from permis where cat_permis='GP')),
+    (11,'corvette corellienne', 120 , 'Z12','A', NULL, (select id_permis from permis where cat_permis='CC')),
+    (12, 'ARC-170 starfighter', 3, 'X37', 'M', 850, (select id_permis from permis where cat_permis='select nom_zone2 from distance where parsec<11 and (nom_zone1 =(select nom_zone from station where nom_station = 'Coruscant'));SC'));
+    
+
+----
+DROP TABLE IF EXISTS vehicule;
+
+-- VEHICULE (id_vehicule, no_chassis, nom_vehicule, date_mes, #id_station, #id_modele)
+CREATE TABLE vehicule (
+    id_vehicule SERIAL PRIMARY KEY,
+    no_chassis INTEGER NOT NULL,
+    nom_vehicule VARCHAR(30) NOT NULL,
+    date_mes date,
+    id_station BIGINT REFERENCES station,
+    id_modele BIGINT REFERENCES modele
+);
+                       
+                       
+INSERT INTO vehicule VALUES
+    (1,100001, 'Faucon millenium', '11-11-15', (select id_station from station where nom_station='Tatooine'),(select id_modele from modele where nom_modele='cargo YT-1300')),
+    (2,100002,'Geonosis power', '24-01-14', (select id_station from station where nom_station='Geonosis'),(select id_modele from modele where nom_modele='voilier solaire geonosien')),
+    (3,100003,'Geonosis power plus','14-05-15', (select id_station from station where nom_station='Geonosis'),(select id_modele from modele where nom_modele='voilier solaire geonosien')),
+    (4,100004,'Starship troopers','14-06-15', (select id_station from station where nom_station='Geonosis'),(select id_modele from modele where nom_modele='cargo YT-1300')),
+    (5,100005, 'Nebuleuse 300', '20-12-13', (select id_station from station where nom_station='Naboo'),(select id_modele from modele where nom_modele='corvette corellienne')),
+    (6,100006,'Aigle royal','13-11-14',(select id_station from station where nom_station='Naboo'),(select id_modele from modele where nom_modele='cargo YT-1300'));
+
+
+----
+DROP TABLE IF EXISTS plein;
+
+--PLEIN (#id_vehicule, id_plein, date_p, nb_bm, qte_carbu)
+CREATE TABLE plein(
+    id_vehicule BIGINT,
+    id_plein BIGINT NOT NULL ,
+    date_p date,
+    nb_km INTEGER  ,
+    qte_carbu INTEGER,
+    PRIMARY KEY(id_vehicule,id_plein),
+    FOREIGN KEY(id_vehicule)	REFERENCES vehicule(id_vehicule)
+);
+                    
+INSERT INTO plein VALUES
+    (1,1, '7-12-18',300, 30),
+    (2,1, '12-02-17',600, 122),
+    (2,2, '14-04-17',620, 134),
+    (2,3, '21-05-17', 580, 117),
+    (2,4, '15-07-17', 300, 75),
+    (3,1, '12-06-18', 500, 122),
+    (3,2, '14-08-18', 520, 134),
+    (3,3, '21-10-18', 480, 117),
+    (4,1, '15-07-18', 270, 27),
+    (4,2, '14-09-18', 250, 25),
+    (4,3, '21-11-18', 265, 28),
+    (5,1, '21-01-17', 1265, 234),
+    (5,2, '17-02-18', 1005, 203),
+    (6,1, '17-01-18', 270, 24),
+    (6,2, '12-03-18', 256, 26),
+    (6,3, '06-05-18', 291, 28),
+    (6,4, '15-07-18', 234, 25),
+    (6,5, '21-09-18', 287, 20),
+    (6,6, '14-11-18', 301, 26),
+    (6,7, '7-12-18', 241, 24);
+
+
+
+----
+DROP TABLE IF EXISTS entretien;
+
+--ENTRETIEN (#id_vehicule, id_entretien, date_e, desc)
+CREATE TABLE entretien (
+    id_vehicule BIGINT,
+    id_entretien BIGINT NOT NULL,
+    date_e date NOT NULL, 
+    descr VARCHAR(50),
+    PRIMARY KEY(id_vehicule,id_entretien),
+    FOREIGN KEY(id_vehicule)	REFERENCES vehicule(id_vehicule)
+);
+           
+           
+INSERT INTO entretien VALUES
+    (2,1,'12-01-18', 'vidange'),
+    (5,1,'10-07-17', 'boite de vitesse'),
+    (5,2,'12-08-18','controle technique'),
+    (6,1,'25-03-18','vidange'),
+    (6,2,'30-11-17','propulsion atomique');
+
+
+----
+DROP TABLE IF EXISTS chauffeur;
+
+-- CHAUFFEUR (id_chauffeur, nom, prenom, adr, #id_station)        
+CREATE TABLE chauffeur (
+    id_chauffeur BIGINT PRIMARY KEY,
+    nom VARCHAR(20),
+    prenom VARCHAR(20),
+    adr VARCHAR(30),
+    id_station BIGINT REFERENCES station
+);
+
+INSERT INTO chauffeur VALUES
+    (111, 'Han','Solo',NULL,(select id_station from station where nom_station='Tatooine')),
+    (211,'Organa','Leia','Alderaan',(select id_station from station where nom_station='Geonosis')),
+    (310,'Skywalker','Luke','Tatooine',(select id_station from station where nom_station='Geonosis')),
+    (411,'Windu','Mace','Coruscant',(select id_station from station where nom_station='Geonosis')),
+    (511,'Dark','Sidius','Coruscant',(select id_station from station where nom_station='Geonosis')),
+    (601,'Binks','Jar Jar','Naboo',(select id_station from station where nom_station='Naboo')),
+    (671,'Trooper','Phasma',NULL,(select id_station from station where nom_station='Naboo')),
+    (761,'Kenobi','Obi-Wan','Tatooine',(select id_station from station where nom_station='Dagobah'));
+
+----
+DROP TABLE IF EXISTS habilitation;
+        
+-- HABILITATION (#id_chauffeur, #id_permis_chauf)
+CREATE TABLE habilitation (
+    id_chauffeur BIGINT NOT NULL,
+    id_permis_chauf BIGINT NOT NULL,
+    PRIMARY KEY(id_chauffeur,id_permis_chauf),
+    FOREIGN KEY(id_chauffeur)	REFERENCES chauffeur(id_chauffeur),
+    FOREIGN KEY(id_permis_chauf)	REFERENCES permis(id_permis)
+);
+
+INSERT INTO habilitation VALUES
+    (111,(select id_permis from permis where cat_permis='CL')),
+    (111,(select id_permis from permis where cat_permis='GP')),
+    (111,(select id_permis from permis where cat_permis='SC')),
+    (111,(select id_permis from permis where cat_permis='CC')),
+    (211,(select id_permis from permis where cat_permis='GP')),
+    (211,(select id_permis from permis where cat_permis='SC')),
+    (211,(select id_permis from permis where cat_permis='CC')),
+    (310,(select id_permis from permis where cat_permis='CL')),
+    (310,(select id_permis from permis where cat_permis='GP')),
+    (310,(select id_permis from permis where cat_permis='SC')),
+    (310,(select id_permis from permis where cat_permis='CC')),
+    (411,(select id_permis from permis where cat_permis='CL')),
+    (601,(select id_permis from permis where cat_permis='CL')),
+    (601,(select id_permis from permis where cat_permis='CC')),
+    (671,(select id_permis from permis where cat_permis='CC')),
+    (761,(select id_permis from permis where cat_permis='CL'));
+
+
+
+----
+DROP TABLE IF EXISTS position;
+
+-- POSITION (#id_vehicule, date, th, #id_chauffeur, nom_zone_p)
+CREATE TABLE position(
+	id_vehicule	serial NOT NULL,
+	date	date,
+	th	integer	CHECK(th > 0 AND th < 4),
+	id_chauffeur	serial,
+	nom_zone_p	varchar(20),
+	PRIMARY KEY(id_vehicule,date,th),
+	FOREIGN KEY(id_vehicule)	REFERENCES vehicule(id_vehicule),
+	FOREIGN KEY(id_chauffeur)	REFERENCES chauffeur(id_chauffeur)
+); 
+                       
+INSERT INTO position VALUES
+    (1,'13-11-18',1,111,NULL),
+    (2,'13-11-18',1,310,NULL),
+    (3,'13-11-18',1,211,NULL),
+    (5,'13-11-18',1,601,NULL),
+    (1,'13-11-18',2,111,NULL),
+    (2,'13-11-18',2,310,NULL),
+    (3,'13-11-18',2,211,NULL),
+    (5,'13-11-18',2,671,NULL),
+    (6,'13-11-18',2,601,NULL),
+    (1,'13-11-18',3,111,NULL),
+    (2,'13-11-18',3,310,NULL),
+    (3,'13-11-18',3,211,NULL),
+    (4,'13-11-18',3,411,NULL),
+    (5,'13-11-18',3,671,NULL),
+    (6,'13-11-18',3,601,NULL),
+    (1,'14-11-18',1,111,NULL),
+    (2,'14-11-18',1,310,NULL),
+    (3,'14-11-18',1,211,NULL),
+    (5,'14-11-18',1,671,NULL),
+    (1,'14-11-18',2,511,NULL),
+    (2,'14-11-18',2,211,'Core Words'),
+    (3,'14-11-18',2,310,'Chommel'),
+    (5,'14-11-18',2,671,'Mayagil'),
+    (6,'14-11-18',2,601,'Core Words');
+
+
+
+
+
+               
+----
+DROP TABLE IF EXISTS distance;
+
+-- DISTANCE(nom_zone1, nom_zone2, parsec) 
+CREATE TABLE distance(
+	nom_zone1	varchar(20),
+	nom_zone2	varchar(20),
+	persec	integer,
+	
+);
+                       
+                       
+INSERT INTO distance VALUES
+ ('Arkanis'  , 'Cadavine', 1),
+ ('Arkanis'  , 'Chommel', 3),
+ ('Arkanis'  , 'Sluis', 6),
+ ('Arkanis'  , 'Core Words', 11),
+ ('Arkanis'  , 'Mayagil', 6),
+ ('Cadavine'  , 'Arkanis', 1),
+ ('Cadavine'  , 'Chommel', 2),
+ ('Cadavine'  , 'Sluis', 5),
+ ('Cadavine'  , 'Core Words', 11),
+ ('Cadavine'  , 'Mayagil', 5),
+ ('Chommel'    , 'Arkanis', 3), 
+ ('Chommel'    , 'Cadavine', 2),
+ ('Chommel'    , 'Chommel', 0),
+ ('Chommel'    , 'Sluis', 4),
+ ('Chommel'    , 'Core Words', 10),
+ ('Chommel'    , 'Mayagil', 4),
+ ('Core Words' , 'Arkanis', 11),
+ ('Core Words' , 'Cadavine', 11),
+ ('Core Words' , 'Chommel', 10),
+ ('Core Words' , 'Sluis', 11),
+ ('Core Words' , 'Mayagil', 10),
+ ('Sluis'     , 'Arkanis', 6),
+ ('Sluis'      , 'Cadavine', 5),
+ ('Sluis'      , 'Chommel', 4),
+ ('Sluis'      , 'Core Words', 11),
+ ('Sluis'      , 'Mayagil', 1),
+ ('Mayagil'    , 'Arkanis', 6),
+ ('Mayagil'    , 'Cadavine', 5),
+ ('Mayagil'    , 'Chommel', 4),
+ ('Mayagil'    , 'Core Words', 10),
+ ('Mayagil'    , 'Sluis', 1);

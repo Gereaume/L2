@@ -1,0 +1,99 @@
+
+CREATE TABLE TI_RICHER_utilisateur(
+	id_user	integer	PRIMARY KEY,
+	nom_user	varchar(30),
+	prenom_user	varchar(30),
+	ddn_user	date,
+	pseudo_user	varchar(30),
+	mdp_user	varchar(30)
+);
+
+CREATE TABLE TI_RICHER_sujet(
+	id_sujet	integer	PRIMARY KEY,
+	id_user	integer	REFERENCES	TI_RICHER_utilisateur(id_user)
+);
+
+CREATE TABLE TI_RICHER_acteur(
+	id_acteur	integer	PRIMARY KEY,
+	nom_acteur	varchar(20),
+	prenom_acteur	varchar(20),
+	ddn_acteur	date
+);
+
+CREATE TABLE TI_RICHER_film(
+	id_film	integer	PRIMARY KEY,
+	nom_film	varchar(100),
+	nom_real	varchar(20),
+	genre_film	varchar(30),
+	année_sortie	date,
+	type_film	varchar(20),
+	nom_prod	varchar(20),
+	synopsis	varchar(20)
+);
+
+CREATE TABLE TI_RICHER_act_film(
+	id_film integer	REFERENCES	TI_RICHER_film(id_film),
+	id_acteur integer	REFERENCES	TI_RICHER_acteur(id_acteur),
+	PRIMARY KEY(id_film,id_acteur)
+	
+);
+
+CREATE TABLE TI_RICHER_ref_suj(
+	id_film	integer REFERENCES	TI_RICHER_film(id_film),
+	id_sujet	integer REFERENCES	TI_RICHER_sujet(id_sujet),
+	PRIMARY KEY(id_film,id_sujet)
+);
+	
+CREATE TABLE TI_RICHER_post(
+	id_user integer	REFERENCES	TI_RICHER_utilisateur(id_user),
+	id_post	integer	REFERENCES	TI_RICHER_post(id_post),
+	id_sujet	integer	REFERENCES	TI_RICHER_sujet(id_sujet),	
+	contenu	varchar(1000),
+	typepost	varchar(1) CHECK typepost IN('Q','R'),
+	nbrep	integer,
+	reponse	integer,
+	PRIMARY KEY(id_user,id_post,id_sujet)
+);
+
+
+
+
+INSERT INTO TI_RICHER_acteur VALUES(1,'Redmayne','Eddie','06-01-1982');
+INSERT INTO TI_RICHER_acteur VALUES(2,'Waterston','Katherine','03-03-1980');
+INSERT INTO TI_RICHER_acteur VALUES(3,'Depp','Johnny','09-06-1963');
+INSERT INTO TI_RICHER_acteur VALUES(4,'Alane','Bernard','25-12-1948');
+INSERT INTO TI_RICHER_acteur VALUES(5,'Clavier','Christian','06-05-1952');
+INSERT INTO TI_RICHER_acteur VALUES(6,'Briat','Guillaume','17-12-1966');
+INSERT INTO TI_RICHER_acteur VALUES(7,'Malek','Rami','12-05-1981');
+INSERT INTO TI_RICHER_acteur VALUES(8,'Lee','Gwilym','24-11-1983');
+INSERT INTO TI_RICHER_acteur VALUES(9,'Boynton','Lucy','17-01-1994');
+INSERT INTO TI_RICHER_acteur VALUES(10,'Lafitte','Laurent','22-08-1973');
+INSERT INTO TI_RICHER_acteur VALUES(11,'Chabbat','Lior','23-10-2007');
+INSERT INTO TI_RICHER_acteur VALUES(12,'Marie','Nicolas','22-02-1954');
+INSERT INTO TI_RICHER_acteur VALUES(13,'Egerton','Taron','10-11-1989');
+INSERT INTO TI_RICHER_acteur VALUES(14,'Foxx','Jamie','13-12-1967');
+INSERT INTO TI_RICHER_acteur VALUES(15,'Dornan','Jamie','01-05-1982');
+
+INSERT INTO TI_RICHER_film VALUES(101,'Les Animaux fantastiques : Les crimes de Grindelwald','David Yates','Fantastique/Aventure','2018','Long-metrage','Warners Bros')
+INSERT INTO TI_RICHER_film VALUES(102,'Asterix - Le Secret de la Potion Magique','Alexandre Astier','Animation/Famille','2018','Long-metrage','Mikros Animation')
+INSERT INTO TI_RICHER_film VALUES(103,'Bohemian Rhapsody','Bryan Singer','Biopic/Drame','2018','Long-metrage','20th Century Fox')
+INSERT INTO TI_RICHER_film VALUES(104,'Le Grinch','Scott Mosier','Animation/Famille','2018','Long-metrage','Universal Pictures')
+INSERT INTO TI_RICHER_film VALUES(105,'Robin des Bois','Otto Bathurst','Aventure/Action','2018','Long-metrage','Lionsgate')
+
+INSERT INTO TI_RICHER_act_film VALUES(101,1);
+INSERT INTO TI_RICHER_act_film VALUES(101,2);
+INSERT INTO TI_RICHER_act_film VALUES(101,3);
+INSERT INTO TI_RICHER_act_film VALUES(102,4);
+INSERT INTO TI_RICHER_act_film VALUES(102,5);
+INSERT INTO TI_RICHER_act_film VALUES(102,6);
+INSERT INTO TI_RICHER_act_film VALUES(103,7);
+INSERT INTO TI_RICHER_act_film VALUES(103,8);
+INSERT INTO TI_RICHER_act_film VALUES(103,9);
+INSERT INTO TI_RICHER_act_film VALUES(104,10);
+INSERT INTO TI_RICHER_act_film VALUES(104,11);
+INSERT INTO TI_RICHER_act_film VALUES(104,12);
+INSERT INTO TI_RICHER_act_film VALUES(105,13);
+INSERT INTO TI_RICHER_act_film VALUES(105,14);
+INSERT INTO TI_RICHER_act_film VALUES(105,15);
+
+

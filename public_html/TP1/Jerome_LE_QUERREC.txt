@@ -1,0 +1,14 @@
+extension text de js
+
+Le texte en html ne s'affiche pas direct car il est en cours de chargement.
+
+un pop_up ( alert )
+
+Le texte en html s'affiche directement.
+
+ça marche pas
+
+2.
+
+
+

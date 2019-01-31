@@ -1,0 +1,63 @@
+CREATE TABLE sport(
+	id_sport	integer	PRIMARY KEY,
+	nom_sport	varchar(20)
+);
+
+CREATE TABLE club(
+	id_club	integer	PRIMARY KEY,
+	nom_club	varchar(20),
+	adr_club	varchar(50)
+);
+
+CREATE TABLE gymnase(
+	id_gym	integer PRIMARY KEY,
+	nom_gym	varchar(20),
+	adr_gym	varchar(50),
+	nom_gardien	varchar(20),
+	CHECK(nom_gardien LIKE 'G%')
+);
+
+CREATE TABLE salle(
+	id_salle	integer,
+	nom_salle	varchar(20),
+	id_gym	integer,
+	FOREIGN KEY(id_gym)	REFERENCES gymnase(id_gym),
+	PRIMARY KEY(id_salle,id_gym)
+);
+
+CREATE TABLE categorie(
+	id_cat	integer	PRIMARY KEY,
+	nom_cat	varchar(20),
+	id_sport integer,
+	FOREIGN KEY(id_sport) REFERENCES sport(id_sport)
+);
+
+CREATE TABLE equipe(
+	id_equipe	integer PRIMARY KEY,
+	nom_equipe	varchar,
+	id_cat	integer,
+	id_club	integer,
+	FOREIGN KEY(id_cat)	REFERENCES categorie(id_cat),
+	FOREIGN KEY(id_club)	REFERENCES club(id_club)
+);
+
+CREATE TABLE tranche_horaire(
+	id_th	integer	PRIMARY KEY,
+	semaine_th	integer,
+	jour_th	varchar(10),
+	heure_deb_th	time,
+	CHECK(jour_th IN('Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'))
+);
+CREATE TABLE entrainement(
+	id_ent	integer,
+	nb_joueur	integer	DEFAULT -1,
+	nom_entraineur	varchar,
+	id_equipe	integer,
+	id_th	integer,
+	id_salle	integer,
+	id_gym	integer,
+	
+	FOREIGN KEY(id_equipe) REFERENCES equipe(id_equipe),
+	FOREIGN KEY(id_th)	REFERENCES tranche_horaire(id_th),
+	FOREIGN KEY(id_salle,id_gym) REFERENCES salle
+);

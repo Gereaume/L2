@@ -1,0 +1,104 @@
+
+
+---- INSERTIONS
+
+--GYMNASE (id_gym, nom_gym, adr_gym, nom_gardien)
+INSERT INTO GYMNASE VALUES (DEFAULT,'Pierre de Coubertin',NULL,'G_Jacquard');
+INSERT INTO GYMNASE VALUES (DEFAULT,'Pierre Brossolette',NULL,'G_Terpin');
+INSERT INTO GYMNASE VALUES(DEFAULT,'Leo Lagrange',NULL,'G_Terpin');
+
+--SALLE (id_salle, nom_salle, #id_gym)
+INSERT INTO SALLE VALUES (12,'Dojo',(select id_gym from gymnase where nom_gym='Pierre de Coubertin'));
+INSERT INTO SALLE VALUES (15,'Marumba',(select id_gym from gymnase where nom_gym='Pierre de Coubertin'));
+INSERT INTO SALLE VALUES (14,'Tatami',(select id_gym from gymnase where nom_gym='Pierre Brossolette'));
+INSERT INTO SALLE VALUES (17,'Bingo',(select id_gym from gymnase where nom_gym='Leo Lagrange'));
+INSERT INTO SALLE VALUES (23,'SALLE 1',(select id_gym from gymnase where nom_gym='Leo Lagrange'));
+INSERT INTO SALLE VALUES (24,'SALLE 2',(select id_gym from gymnase where nom_gym='Leo Lagrange'));
+
+
+--CLUB (id_club, nom_club, adr_club)
+INSERT INTO CLUB VALUES (DEFAULT,'SPORTIF LAVALLOIS',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'ACB',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'TVC',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'PETITS LOUPS',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'MAMIE SPORTIVE',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'SMA',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'FIC',NULL);
+INSERT INTO CLUB VALUES (DEFAULT,'MVC',NULL);
+
+--SPORT (id_sport, nom_sport)
+INSERT INTO SPORT VALUES (DEFAULT,'Judo');
+INSERT INTO SPORT VALUES (DEFAULT,'Tennis');
+INSERT INTO SPORT VALUES (DEFAULT,'Football');
+INSERT INTO SPORT VALUES (DEFAULT,'BasketBall');
+INSERT INTO SPORT VALUES (DEFAULT,'Gymnastique');
+INSERT INTO SPORT VALUES (DEFAULT,'Handball');
+INSERT INTO SPORT VALUES (DEFAULT,'Preparation Physique');
+INSERT INTO SPORT VALUES (DEFAULT,'Table Tennis');
+INSERT INTO SPORT VALUES (DEFAULT,'VolleyBall');
+INSERT INTO SPORT VALUES (DEFAULT,'Badminton');
+
+--CATEGORIE (id_cat, nom_cat, #id_sport)
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior',(select id_sport from sport where nom_sport='BasketBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='BasketBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Veteran',(select id_sport from sport where nom_sport='BasketBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior',(select id_sport from sport where nom_sport='Tennis'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='Tennis'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Veteran',(select id_sport from sport where nom_sport='Tennis'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Minor I',(select id_sport from sport where nom_sport='Judo'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Minor II',(select id_sport from sport where nom_sport='Judo'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior',(select id_sport from sport where nom_sport='FootBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='FootBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Veteran',(select id_sport from sport where nom_sport='FootBall'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior I',(select id_sport from sport where nom_sport='Gymnastique'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Junior II',(select id_sport from sport where nom_sport='Gymnastique'));
+INSERT INTO CATEGORIE VALUES (DEFAULT,'Senior',(select id_sport from sport where nom_sport='Gymnastique'));
+
+--EQUIPE (id_equipe, nom_equipe, #id_cat, #id_club)
+INSERT INTO EQUIPE VALUES (DEFAULT,'SC Minor I',7,1);
+INSERT INTO EQUIPE VALUES (DEFAULT,'SC Minor II',8,1);
+INSERT INTO EQUIPE VALUES (DEFAULT,'ACB Junior',4,2);
+INSERT INTO EQUIPE VALUES (DEFAULT,'ACB Senior',5,2);
+INSERT INTO EQUIPE VALUES (DEFAULT,'ACB Veteran',6,2);
+INSERT INTO EQUIPE VALUES (DEFAULT,'TVC Minor II',2,4);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Les petits rouleurs',12,5);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Les petits poussins',7,1);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Jumping Senior',2,4);
+INSERT INTO EQUIPE VALUES (DEFAULT,'Volontary women',14,5);
+INSERT INTO EQUIPE VALUES (DEFAULT,'SMA Senior II',2,6);
+
+--TRANCHE_HORAIRE(id_th, semaine_th, jour_th, heure_deb_th)
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Lundi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Lundi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Lundi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mardi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mardi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Mardi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mercredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Mercredi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Mercredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Jeudi' ,'15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Jeudi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Jeudi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Vendredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Vendredi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Vendredi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Samedi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Samedi','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Samedi','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Dimanche','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,12,'Dimanche','17:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Dimanche','15:00');
+INSERT INTO TRANCHE_HORAIRE VALUES (DEFAULT,13,'Dimanche','19:00');
+
+
+--ENTRAINEMENT(id_ent, nb_joueur, nom_entraineur, #id_equipe, #id_th, #id_salle, #id_gym)
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,5,'Loic Dupont',1,1,12,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,12,'Sophie Banot',2,2,12,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,24,'Luc Marni',1,5,15,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,16,'Clementine Pierrot',4,4,15,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,12,'Jacques Santini',5,8,23,3);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,NULL,'Luc Marni',3,5,15,1);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,NULL,'Jiji Loroso',7,3,14,2);
+INSERT INTO ENTRAINEMENT VALUES (DEFAULT,NULL,'Manu Katche',9,22,15,1);
+
