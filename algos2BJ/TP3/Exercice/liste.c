@@ -87,7 +87,7 @@ err_t liste_elem_ecrire( liste_t * liste ,
       return(ERR_LISTE_IND_ELEM);
     }
 #endif
-  liste->liste[ind] = elem ;
+  liste->fonc_aff(&(liste->liste[ind]), elem); /* changer avec une fonction d'affectation permettant de choisir sa méthode de stockage */
 
   return(OK) ;
 }
@@ -97,8 +97,9 @@ err_t liste_elem_ecrire( liste_t * liste ,
  * Creation d'une liste 
  */
 extern
-liste_t * liste_creer( const int nb )
+liste_t * liste_creer( const int nb, err_t (*fonc_aff) (void*, void*), err_t (*fonc_destr) (void*) )
 {
+  int i;
   liste_t * liste ;
   
   if(( liste= malloc(sizeof(liste_t))) == NULL )
@@ -109,6 +110,9 @@ liste_t * liste_creer( const int nb )
 
   liste->nb = nb ;
   liste->liste = (void**)NULL ;
+  liste->fonc_aff = fonc_aff;
+  liste->fonc_destr = fonc_destr;
+
   if( nb > 0 ) 
     {
       if( ( liste->liste = malloc( sizeof(void *) * nb ) ) == NULL ) 
@@ -118,7 +122,9 @@ liste_t * liste_creer( const int nb )
 	  return((liste_t *)NULL);
 	}
     }
-
+  for(i=0;i<nb;i++){
+    liste->liste[i] = NULL;
+  }
   liste_cpt++ ; 
 
   return(liste);
@@ -131,11 +137,23 @@ liste_t * liste_creer( const int nb )
  */
 
 extern
-err_t liste_detruire( liste_t ** liste , ... )
+err_t liste_detruire( liste_t ** liste , ... ) /* Rajout de la focntion de destruction */
 {
-  /* 
-   * A FAIRE
-   */
+  int i;
+
+  for(i=0;i<(*liste)->nb;i++){
+    if((*liste)->liste[i] != NULL){
+      (*liste)->fonc_destr(&((*liste)->liste[i]));
+    }
+    (*liste)->liste[i] = NULL;
+  }
+  /* On libère, éviter pointeurs fous */
+  free((*liste)->liste);
+  free(*liste);
+  (*liste) = NULL;
+
+  liste_cpt--;
+
   return(OK) ;
 }
 
@@ -148,11 +166,12 @@ err_t liste_detruire( liste_t ** liste , ... )
  */
 
 extern 
-void liste_afficher( liste_t * const liste ,...)
+void liste_afficher( liste_t * const liste ,void(*affiche)(void*))
 {
-  /*
-   * A FAIRE 
-   */
+  int i;
+  for(i=0; i<liste->nb;i++){
+    affiche(liste->liste[i]);
+  }
   return ;
 }
 

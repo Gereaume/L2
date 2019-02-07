@@ -1,16 +1,95 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
+#include <getopt.h>
 #include <individu.h>
 #include <fraction.h>
 #include <mystring.h>
 #include <liste.h>
 
-#define N 5 
+
+
+/*********************************
+Pas eu le temps d'aborder les tris
+*********************************/
+
+
 
 int
-main( ) 
+main( int argc, char * argv[] ) /* argument qui donne le nb d'objets des listes */ 
 {
+
+
+  int var;
+
+  static struct option longopts[] =
+{
+  {"verbose", required_argument, NULL, (int)'v'},
+  {0, 0, 0, 0}
+};
+
+
+
+ if(argc > 1){
+
+  var = getopt_long(argc, argv, "v", longopts, NULL);
+
+  int N = atoi(argv[1]);
+  
+/* 
+  sscanf(argv[1], "%i", &N);  renvoie 1 si ok, sinon 0 
+*/
+
+  int choix;
+
+  err_t (*fonc_aff_individu) (void *, void*);
+  err_t (*fonc_aff_fraction) (void *, void*);
+  err_t (*fonc_aff_string) (void *, void*);
+
+  err_t (*fonc_destr_individu) (void*);
+  err_t (*fonc_destr_fraction) (void*);
+  err_t (*fonc_destr_string) (void*);
+
+
+  do{ /* Rajout du choix sur l'ajout d'un élément */
+    printf("\nMenu sélection :\n");
+      printf("1 - Ecrire les éléments par référencement.\n");
+      printf("2 - Ecrire les éléments par copie.\n");
+      printf("Choisir ? --> ");
+      scanf("%i",&choix);
+
+      switch(choix){
+
+      case 1:
+        fonc_aff_individu = individu_referencer;
+	fonc_aff_fraction = fraction_referencer;
+	fonc_aff_string = string_referencer;
+
+        fonc_destr_individu = individu_effacer;
+        fonc_destr_fraction = fraction_effacer;
+        fonc_destr_string = string_effacer;
+	
+      break;
+
+      case 2:
+        fonc_aff_individu = individu_copier;
+	fonc_aff_fraction = fraction_copier;
+	fonc_aff_string = string_copier;
+
+        fonc_destr_individu = individu_detruire;
+        fonc_destr_fraction = fraction_detruire;
+        fonc_destr_string = string_detruire;
+	
+      break;
+
+      default: printf("Err !!! Votre choix doit etre 1 ou 2 !");
+      }
+
+  }while(choix != 1 && choix != 2);
+
+
+
+
   err_t noerr = OK; 
 
   individu_t ** individus = NULL  ; 
@@ -63,77 +142,112 @@ main( )
   printf("OK\n");
 
   /* ---------- */
-
-  printf( "\nTest creation d'une liste de %d individus \n" , N ) ;
-  liste = liste_creer(N) ;  
+  if( var == 'v' ){
+    printf( "\nTest creation d'une liste de %d individus \n" , N ) ;
+  }
+  liste = liste_creer(N, fonc_aff_individu, fonc_destr_individu) ; 
+ 
   for( i=0 ; i<N ; i++ ) 
     {
       liste_elem_ecrire( liste , individus[i] , i ) ;
     }
 
-  printf( "Test affichage liste d'individus AVANT tri \n" ) ;
-  liste_afficher( liste , ' ' ) ; 
+  if( var == 'v' ){
+    printf( "Test affichage liste d'individus AVANT tri \n" ) ;
+  }
+
+  liste_afficher( liste , (void*)individu_afficher ) ; 
   printf( "\n");
 
-  printf( "Test Tri de la liste des individus\n" );
+  if( var == 'v' ){
+    printf( "Test Tri de la liste des individus\n" );
+  }
   liste_trier( liste  ) ;
 
-  printf( "Test affichage liste d'individus APRES tri\n" ) ;
-  liste_afficher( liste , ' ' ) ; 
+  if( var == 'v' ){
+    printf( "Test affichage liste d'individus APRES tri\n" ) ;
+  }
+  liste_afficher( liste , (void*)individu_afficher ) ; 
   printf( "\n");
- 
-  printf( "Test destruction liste d'individus\n" ) ;
+
+  if( var == 'v' ){
+    printf( "Test destruction liste d'individus\n" ) ;
+  }
+
   if( ( noerr = liste_detruire( &liste ) ) )
     { 
       printf("Sortie avec code erreur = %d\n" , noerr ) ;
       return(noerr) ; 
     }
 
-  printf( "\nTest creation d'une liste de %d fractions \n" , N ) ;
-  liste = liste_creer(N) ;  
+  if( var == 'v' ){
+    printf( "\nTest creation d'une liste de %d fractions \n" , N ) ;
+  }
+  liste = liste_creer(N, fonc_aff_fraction, fonc_destr_fraction) ; 
+ 
   for( i=0 ; i<N ; i++ ) 
     {
       liste_elem_ecrire( liste , fractions[i] , i ) ;
     }
 
-  printf( "Test affichage liste de fractions AVANT tri\n" ) ;
-  liste_afficher( liste , ' ' ) ; 
+  if( var == 'v' ){
+    printf( "Test affichage liste de fractions AVANT tri\n" ) ;
+  }
+  liste_afficher( liste , (void*)fraction_afficher ) ; 
   printf( "\n");
 
-  printf( "Test Tri de la liste des fractions\n" );
+  if( var == 'v' ){
+    printf( "Test Tri de la liste des fractions\n" );
+  }
   liste_trier( liste ) ;
 
-  printf( "Test affichage liste des fractions APRES tri\n" ) ;
-  liste_afficher( liste ,  ' ' ) ; 
+  if( var == 'v' ){
+    printf( "Test affichage liste des fractions APRES tri\n" ) ;
+  }
+  liste_afficher( liste ,  (void*)fraction_afficher ) ; 
   printf( "\n");
  
-  printf( "Test destruction liste de fractions\n" ) ;
+  if( var == 'v' ){
+    printf( "Test destruction liste de fractions\n" ) ;
+  }
+
   if( ( noerr = liste_detruire( &liste ) ) )
     { 
       printf("Sortie avec code erreur = %d\n" , noerr ) ;
       return(noerr) ; 
     }
   
+  if( var == 'v' ){
+    printf( "\nTest creation d'une liste de %d strings \n" , N ) ;
+  }
+  liste = liste_creer(N, fonc_aff_string, fonc_destr_string) ;  
 
-  printf( "\nTest creation d'une liste de %d strings \n" , N ) ;
-  liste = liste_creer(N) ;  
   for( i=0 ; i<N ; i++ ) 
     {
       liste_elem_ecrire( liste , strings[i] , i ) ;
     }
 
-  printf( "Test affichage liste de strings AVANT tri\n" ) ;
-  liste_afficher( liste ,  ' ' ) ; 
+  if( var == 'v' ){
+    printf( "Test affichage liste de strings AVANT tri\n" ) ;
+  }
+  liste_afficher( liste ,  (void*)string_afficher ) ; 
   printf( "\n");
  
-  printf( "Test Tri de la liste des strings\n" );
+  if( var == 'v' ){
+    printf( "Test Tri de la liste des strings\n" );
+  }
   liste_trier( liste  ) ;
   
-  printf( "Test affichage liste des strings APRES tri\n" ) ;
-  liste_afficher( liste ,  ' ' ) ; 
+  if( var == 'v' ){
+    printf( "Test affichage liste des strings APRES tri\n" ) ;
+  }
+  liste_afficher( liste ,  (void*)string_afficher ) ; 
   printf( "\n");
   
-  printf( "Test destruction liste de strings\n" ) ;
+  if( var == 'v' ){
+    printf( "Test destruction liste de strings\n" ) ;
+  }
+
   if( ( noerr = liste_detruire( &liste  ) ) )
     { 
       printf("Sortie avec code erreur = %d\n" , noerr ) ;
@@ -188,9 +302,14 @@ main( )
   /* ---------- */
 
 
-  printf( "\nFin du programme des test sur la lste d'objets homogenes\n" ) ; 
+  printf( "\nFin du programme des test sur la liste d'objets homogenes\n" ) ; 
   
   printf( "Nombre de liste_t  = %lu\n" , liste_cpt ) ;
+
+ }
+ else{
+  printf("Erreur - faire ./test_liste (nb obj) (option verbose)\n");
+ }
 
   return(0) ; 
 }
